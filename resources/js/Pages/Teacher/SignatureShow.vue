@@ -1,3 +1,11 @@
+// Jesús Amador
+/* 
+Fue una prueba muy buena y entretenida aunque algo larga a mi parecer
+Tuve algunos problemas con el manejo de los modales, no había documentación sobre eso en el readme o una wiki (recomiendo tenerla para el proyecto)
+El manejo de las fechas decidí hacerlo sin librerías únicamente como experimento (JS sique siendo malo con las fechas)
+Traté de usar buenas practicas en los commits, olvidé usar '#' pero dejo la recomendación (es más sencillo buscar por '#')
+Igual me pareció muy buena, tardé más de lo planeado y creo se debío a mi falta de práctica últimamente
+*/
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref } from "vue";
