@@ -1,4 +1,6 @@
 <script setup>
+import { formatDate } from "@/utils/dateFormatted";
+
 const props = defineProps({
     signatures: {
         type: Array,
@@ -39,7 +41,7 @@ const getStatusName = (status) => {
                 v-for="signature in signatures"
                 :key="signature.id"
             >
-                <div class="table-cell">{{ signature.date }}</div>
+                <div class="table-cell">{{ formatDate({date: signature.date, format: 'short'}) }}</div>
                 <div class="table-cell">{{ signature.hour }}</div>
                 <div class="table-cell">
                     {{ signature.start_hour }} a {{ signature.end_hour }}

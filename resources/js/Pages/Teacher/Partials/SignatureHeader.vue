@@ -1,5 +1,5 @@
 <script setup>
-import { getDateFormatted } from "@/utils/dateFormatted";
+import { formatDate } from "@/utils/dateFormatted";
 
 const props = defineProps({
     pendingAssistance: {
@@ -8,7 +8,7 @@ const props = defineProps({
     },
 });
 
-const date = getDateFormatted();
+const date = formatDate({date: undefined, format: 'long'});
 </script>
 
 <template>
