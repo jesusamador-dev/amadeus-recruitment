@@ -5,6 +5,7 @@ import { Head } from '@inertiajs/vue3';
 import SignatureHeader from './Partials/SignatureHeader.vue';
 import SignatureTable from './Partials/SignatureTable.vue';
 import EventModal from './Partials/EventModal.vue';
+import EditSignatureModal from './Partials/EditSignatureModal.vue';
 
 
 const props = defineProps ({
@@ -20,18 +21,39 @@ const props = defineProps ({
 
 const typeModal = ref('');
 const messageModal = ref('');
-const show = ref(false);
+const signatureId = ref(0);
+const dateModal = ref('');
+const hourModal = ref('');
+const showEvent = ref(false);
+const showEditSignature = ref(false);
 
 const showEventModal = ({type, message}) => {
     typeModal.value = type;
     messageModal.value = message;
-    console.log(message)
-    show.value = true;
+    showEvent.value = true;
 }
 
-const close = () => {
-    show.value = false;
+const closeEventModal = () => {
+    showEvent.value = false;
 }
+
+const edit = ({ id, date, hour }) => {
+    signatureId.value = id;
+    dateModal.value = date;
+    hourModal.value = hour;
+    showEditSignature.value = true;
+}
+
+const closeEditSignature = () => {
+    showEditSignature.value = false;
+}
+
+const submit = (form) => {
+    typeModal.value = "success";
+    messageModal.value = "¡Solicitud enviada! El equipo directivo revisará su caso.";
+    showEvent.value = true;
+}
+
 </script>
 
 <template>
@@ -39,8 +61,9 @@ const close = () => {
     <AuthenticatedLayout :croute="customroute">
         <div class="mx-auto">
             <signature-header class="mb-5" @error="showEventModal"></signature-header>
-            <signature-table class="mb-3" :signatures="signatures"></signature-table>
-            <event-modal :type="typeModal" :message="messageModal" :show="show" @close="close()"></event-modal>
+            <signature-table class="mb-3" :signatures="signatures" @edit="edit"></signature-table>
+            <event-modal :type="typeModal" :message="messageModal" :show="showEvent" @close="closeEventModal"></event-modal>
+            <edit-signature-modal :id="signatureId" :date="dateModal" :hour="hourModal" :show="showEditSignature" @close="closeEditSignature" @update="submit"></edit-signature-modal>
         </div>
     </AuthenticatedLayout>
 </template>

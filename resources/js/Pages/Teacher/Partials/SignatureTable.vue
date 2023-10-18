@@ -7,6 +7,7 @@ const props = defineProps({
         default: () => [],
     },
 });
+const emit = defineEmits(['edit']);
 
 const getStatusClass = (status) => {
     return {
@@ -24,6 +25,10 @@ const getStatusName = (status) => {
     };
     return names[status];
 };
+
+const edit = (id, date, hour) => {
+    emit('edit', { id, date, hour });
+}
 </script>
 
 <template>
@@ -53,7 +58,9 @@ const getStatusName = (status) => {
                     ></span
                     >{{ getStatusName(signature.status) }}
                 </div>
-                <div class="table-cell"></div>
+                <div class="table-cell" @click="edit(signature.id, signature.date, signature.hour)">
+                    <button class="btn btn-flat"><i class="btn-edit"></i></button>
+                </div>
             </div>
         </div>
     </section>
@@ -102,5 +109,14 @@ const getStatusName = (status) => {
 }
 .status-rejected {
     background: #da0505;
+}
+
+.btn-edit {
+    display: flex;
+    background-image: url(@/assets/icon_edit_pencil.svg);
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
 }
 </style>
