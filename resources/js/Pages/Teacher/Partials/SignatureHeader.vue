@@ -1,5 +1,6 @@
 <script setup>
 import { formatDate } from "@/utils/dateFormatted";
+import { ref } from "vue"; 
 
 const props = defineProps({
     pendingAssistance: {
@@ -7,8 +8,14 @@ const props = defineProps({
         default: true,
     },
 });
+const pendingAssistance = ref(props.pendingAssistance);
 
-const date = formatDate({date: undefined, format: 'long'});
+const date = formatDate({ date: undefined, format: "long" });
+
+const register = () => {
+    pendingAssistance.value = true;
+
+}
 </script>
 
 <template>
@@ -21,22 +28,28 @@ const date = formatDate({date: undefined, format: 'long'});
                 <div>
                     <div
                         class="signature__assistence signature__assistence--pending mb-3"
-                        v-if="pendingAssistance"
+                        v-if="pendingAssistance.value"
                     >
                         <p class="mb-0">Asistencia: Pendiente</p>
                     </div>
                     <div class="signature__date">
-                        <p class="mb-0">{{ date }}</p>
+                        <p class="mb-0">
+                            <i class="fa-light fa-calendar icon-size me-2"></i
+                            >{{ date }}
+                        </p>
                     </div>
                 </div>
             </section>
         </div>
         <div class="col-4 mx-auto">
             <section class="flex flex-column align-items-center">
-                <div class="circle-external mb-2">
-                    <div class="circle-internal"></div>
+                <div class="circle-external mb-2" v-on:click="register()">
+                    <div class="circle-internal flex justify-content-center align-items-center">
+                        <img src="@/assets/icon_person_yellow.svg" v-if="pendingAssistance.value" alt="">
+                        <img src="@/assets/icon_person_green.svg" v-if="!pendingAssistance.value" alt="">
+                    </div>
                 </div>
-                <p v-if="pendingAssistance" class="signature__register mb-0">
+                <p v-if="pendingAssistance.value" class="signature__register mb-0">
                     REGISTRAR
                 </p>
             </section>
@@ -45,13 +58,14 @@ const date = formatDate({date: undefined, format: 'long'});
             <section class="flex flex-column justify-content-end h-100">
                 <div
                     class="signature__hours flex flex-column align-items-center justify-content-center bg-white"
+                    v-if="pendingAssistance.value"
                 >
                     <h3 class="signature__hours-title">Total de horas</h3>
                     <h2 class="signature__hours-total mb-0">30h 40'</h2>
                 </div>
                 <div
                     class="signature__assistence signature__assistence--approved mb-0"
-                    v-if="!pendingAssistance"
+                    v-if="!pendingAssistance.value"
                 >
                     <p class="mb-0">Asistencia: Presente</p>
                 </div>
