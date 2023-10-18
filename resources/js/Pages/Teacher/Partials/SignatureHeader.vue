@@ -1,6 +1,6 @@
 <script setup>
 import { formatDate } from "@/utils/dateFormatted";
-import { ref } from "vue"; 
+import { ref } from "vue";
 
 const props = defineProps({
     pendingAssistance: {
@@ -8,13 +8,18 @@ const props = defineProps({
         default: true,
     },
 });
-const pendingAssistance = ref(props.pendingAssistance);
 
+const emit = defineEmits(['error']);
+
+const isPendingAssistance = ref(props.pendingAssistance);
 const date = formatDate({ date: undefined, format: "long" });
 
 const register = () => {
-    pendingAssistance.value = true;
-
+    if(!isPendingAssistance.value) {
+        emit('error', {type: 'error', message: 'No se puede volver a registrar asistencia.'})
+        return;
+    }
+    isPendingAssistance.value = !isPendingAssistance.value;
 }
 </script>
 
@@ -28,7 +33,7 @@ const register = () => {
                 <div>
                     <div
                         class="signature__assistence signature__assistence--pending mb-3"
-                        v-if="pendingAssistance.value"
+                        v-if="isPendingAssistance"
                     >
                         <p class="mb-0">Asistencia: Pendiente</p>
                     </div>
@@ -43,13 +48,13 @@ const register = () => {
         </div>
         <div class="col-4 mx-auto">
             <section class="flex flex-column align-items-center">
-                <div class="circle-external mb-2" v-on:click="register()">
+                <div class="circle-external mb-2" @click="register()">
                     <div class="circle-internal flex justify-content-center align-items-center">
-                        <img src="@/assets/icon_person_yellow.svg" v-if="pendingAssistance.value" alt="">
-                        <img src="@/assets/icon_person_green.svg" v-if="!pendingAssistance.value" alt="">
+                        <img src="@/assets/icon_person_yellow.svg" v-if="isPendingAssistance" alt="">
+                        <img src="@/assets/icon_person_green.svg" v-if="!isPendingAssistance" alt="">
                     </div>
                 </div>
-                <p v-if="pendingAssistance.value" class="signature__register mb-0">
+                <p v-if="isPendingAssistance" class="signature__register mb-0">
                     REGISTRAR
                 </p>
             </section>
@@ -58,14 +63,14 @@ const register = () => {
             <section class="flex flex-column justify-content-end h-100">
                 <div
                     class="signature__hours flex flex-column align-items-center justify-content-center bg-white"
-                    v-if="pendingAssistance.value"
+                    v-if="isPendingAssistance"
                 >
                     <h3 class="signature__hours-title">Total de horas</h3>
                     <h2 class="signature__hours-total mb-0">30h 40'</h2>
                 </div>
                 <div
                     class="signature__assistence signature__assistence--approved mb-0"
-                    v-if="!pendingAssistance.value"
+                    v-if="!isPendingAssistance"
                 >
                     <p class="mb-0">Asistencia: Presente</p>
                 </div>
@@ -124,10 +129,12 @@ const register = () => {
 }
 
 .circle-external {
+    cursor: pointer;
     display: inline-flex;
     padding: 11.463px;
     flex-direction: column;
     align-items: flex-start;
+    user-select: none;
     gap: 6.55px;
     border-radius: 81.878px;
     background: var(
